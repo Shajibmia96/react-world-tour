@@ -6,12 +6,28 @@ import './countries.css'
 const Countries = () => {
     const [countries, setCountries] = useState([])
 
-    const [visitedCountry, setvisitedCountry] = useState([])
+    const [visitedCountry, setVisitedCountry] = useState([]);
 
      const handleVisitedCountry = country => {
            console.log('hello');   
-           setvisitedCountry(country)
-               
+           if(visitedCountry.includes(country)){
+              alert('This country already in list')
+           }else{
+            const newVisitedCountry = [...visitedCountry, country];
+            setVisitedCountry(newVisitedCountry)
+           }
+          
+     }
+
+     const handleRemove = country =>{
+          
+            if(visitedCountry.includes(country)){
+                const removeCountry = visitedCountry.filter(item => item !== country)
+
+                setVisitedCountry(removeCountry)
+            }else{
+                alert('This item already remove')
+            }
      }
 
       useEffect(()=>{
@@ -23,10 +39,13 @@ const Countries = () => {
         <div>
             <h2>Total Countries : {countries.length}</h2>
             <div>
-                 <h3>Visited Country List</h3>
-                 <ul>
+                 <h3>Visited Country {visitedCountry.length}</h3>
+                 <ul style={{listStyle:"none", padding:0, display:'flex', gap:'15px'}}>
                       {
-                        visitedCountry.map(country => <li key={country.ccn3}>{country.name.common}</li>)
+                        visitedCountry.map((country, index) => <div key={index} >
+                             <li key={index}><strong>{index+1} .</strong> {country.name.common}</li>
+                             <img style={{width:'100px', marginTop:'20px'}} src={country.flags.png} alt="" />
+                        </div> )
                       }
                  </ul>
             </div>
@@ -36,6 +55,7 @@ const Countries = () => {
                         key={country.ccn3} 
                         country={country}
                         handleVisitedCountry={handleVisitedCountry}
+                        handleRemove ={handleRemove}
                         ></Country>)
                 }
             </div>
